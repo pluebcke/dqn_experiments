@@ -2,10 +2,10 @@
 
 In reinforcement learning, it can be difficult to get an agent to behave the way it is expected to (e.g. [1]). Furthermore, implementation details can make the difference between a successful agent and an agent that fails to learn [2].  
 Behaviour suite by DeepMind is "a collection of carefully-designed experiments
-that investigate core capabilities of reinforcement learning (RL) agents" [2].  These experiments can be used to compare the performance of different algorithms and therefore help to mitigate the problems mentioned above.
+that investigate core capabilities of reinforcement learning (RL) agents" [3].  These experiments can be used to compare the performance of different algorithms and therefore help to mitigate the problems mentioned above.
 
-DQN is one of the most well-known RL algorithms and gained recognition for achieving human level performance on 49 Atari games [3].
-In the Rainbow publication, six improvements on the standard DQN algorithm are combined to achieve even better performance on the set of Atari games [4].
+DQN is one of the most well-known RL algorithms and gained recognition for achieving human level performance on 49 Atari games [4].
+In the Rainbow publication, six improvements on the standard DQN algorithm are combined to achieve even better performance on the set of Atari games [5].
 
 DQN and Rainbow are great starting points to learn more about Reinforcement Learning and see how these algorithmic improvements change the agent's performance on the BSuite experiments.
 During the next couple of  weeks I will be implementing DQN and the six improvements from Rainbow in [PyTorch](https://pytorch.org/).
@@ -33,9 +33,10 @@ There are still some things I need to implement for the full Rainbow algorithm. 
 
 ## References
 [1] https://www.alexirpan.com/2018/02/14/rl-hard.html, last  visited: 2020-03-03  
-[2] Osband, Ian, et al. "Behaviour Suite for Reinforcement Learning." arXiv preprint arXiv:1908.03568 (2019).  
-[3] Mnih, Volodymyr, et al. Human-level control through deep reinforcement learning. Nature, 2015, 518. Jg., Nr. 7540, S. 529-533.  
-[4] Hessel, Matteo, et al. Rainbow: Combining improvements in deep reinforcement learning. In: Thirty-Second AAAI Conference on Artificial Intelligence. 2018.  
+[2] Engstrom, Logan, et al. "Implementation Matters in Deep RL: A Case Study on PPO and TRPO." International Conference on Learning Representations. 2019.
+[3] Osband, Ian, et al. "Behaviour Suite for Reinforcement Learning." arXiv preprint arXiv:1908.03568 (2019).  
+[4] Mnih, Volodymyr, et al. Human-level control through deep reinforcement learning. Nature, 2015, 518. Jg., Nr. 7540, S. 529-533.  
+[5] Hessel, Matteo, et al. Rainbow: Combining improvements in deep reinforcement learning. In: Thirty-Second AAAI Conference on Artificial Intelligence. 2018.  
 
 #### Code References:  
 [C1] Lapan, Maxim. Deep Reinforcement Learning Hands-On, Packt Publishing Ltd, 2018.  
