@@ -18,7 +18,7 @@ When I first started working on DRL, I completed Udacity's Deep Reinforcement Le
 I'll add further sources that helped me to better understand some detail of the algorithmic improvements and their implementation when I discuss their results.
 
 ## Results  
-- [Basic DQN client and the first results](https://github.com/pluebcke/dqn_experiments/results/basic_dqn.md)
+- [Basic DQN client and the first results](https://github.com/pluebcke/dqn_experiments/blob/master/results/basic_dqn.md)
 
 ## Todo
 There are still some things I need to implement for the full Rainbow algorithm. My next steps in that direction are:
