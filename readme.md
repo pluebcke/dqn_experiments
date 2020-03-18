@@ -14,7 +14,8 @@ During the next couple of  weeks I will be implementing DQN and the six improvem
 
 The first step in this project entailed reading the chapters on DQN and Rainbow in the "Deep Reinforcement Learning Hands-On" book by Maxim Lapan [C1] and working through the corresponding [code](https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On).
 The structure and use of PyTorch methods in this repository is therefore highly influenced by that book.  
-When I first started working on DRL, I completed Udacity's Deep Reinforcement Learning Nanodegree ([C2], here's their excellent [Github repository](https://github.com/udacity/deep-reinforcement-learning)) and read through OpenAi's Spinning Up repository [C3], so these two sources probably also had an influence on the code.  
+When I first started working on DRL, I completed Udacity's Deep Reinforcement Learning Nanodegree ([C2], here's their excellent [Github repository](https://github.com/udacity/deep-reinforcement-learning)) and read through OpenAi's Spinning Up repository [C3], so these two sources probably also had an influence on the code.  I also read through the baseline implementations of the BSuite repository, to get a better understanding of how the agent interacts with the environment.
+
 I'll add further sources that helped me to better understand some detail of the algorithmic improvements and their implementation when I discuss their results.
 
 ## Results  
