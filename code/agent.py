@@ -119,11 +119,10 @@ class Agent:
 
         if self.memory.number_samples() < self.start_optimization:
             return
-        if self.number_steps % self.update_qnet_every != 0:
-            return
 
-        s0, a0, n_step_reward, discount, s1, _, dones, indices, weights = self.memory.sample_batch(self.batch_size)
-        self.optimization_step(s0, a0, n_step_reward, discount, s1, indices, weights)
+        if self.number_steps % self.update_qnet_every == 0:
+            s0, a0, n_step_reward, discount, s1, _, dones, indices, weights = self.memory.sample_batch(self.batch_size)
+            self.optimization_step(s0, a0, n_step_reward, discount, s1, indices, weights)
 
         if self.number_steps % self.update_target_every == 0:
             self.q_target.load_state_dict(self.qnet.state_dict())
