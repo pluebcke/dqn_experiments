@@ -20,11 +20,11 @@ I'll add further sources that helped me to better understand some detail of the 
 
 ## Results  
 - [Basic DQN client and the first results](https://github.com/pluebcke/dqn_experiments/blob/master/results/basic_dqn.ipynb)
-
+- [DDQN](https://github.com/pluebcke/dqn_experiments/blob/master/results/ddqn.ipynb)
 ## Todo
 There are still some things I need to implement for the full Rainbow algorithm. My next steps in that direction are:
 - Implement the improvements and run them on the BSuite experiments:
-  - DDQN
+  - ~~DDQN~~ added 2020-03-2020
   - Dueling DDQN
   - n-Step roll out
   - Prioritized Replay
