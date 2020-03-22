@@ -33,7 +33,6 @@ class Agent:
         self.qnet = Dqn(state_size, action_size, settings['qnet_settings']).to(device)
         self.q_target = Dqn(state_size, action_size, settings['qnet_settings']).to(device)
         self.q_target.load_state_dict(self.qnet.state_dict())
-
         self.optimizer = optim.Adam(self.qnet.parameters(), lr=settings['lr'])
 
         self.epsilon = settings["epsilon_start"]
@@ -45,6 +44,7 @@ class Agent:
         self.update_qnet_every = settings["update_qnet_every"]
         self.update_target_every = settings["update_target_every"]
         self.number_steps = 0
+        self.ddqn = settings["ddqn"]
 
         # Initialize replay memory
         self.memory = ReplayMemory(device, settings['buffer_size'], self.gamma,
@@ -106,13 +106,16 @@ class Agent:
         Returns:
             None
         """
+
         observation = np.array(step.observation).flatten()
         next_observation = np.array(next_step.observation).flatten()
         done = next_step.last()
-        exp = Experience(observation, action,
+        exp = Experience(observation,
+                         action,
                          next_step.reward,
                          next_step.discount,
-                         next_observation, 0,
+                         next_observation,
+                         0,
                          done
                          )
         self.memory.add(exp)
@@ -152,11 +155,14 @@ class Agent:
         """
 
         with torch.no_grad():
-            next_q_vals = self.q_target(s1).squeeze(1)
-            next_q_val = torch.max(next_q_vals, dim=1).values.unsqueeze(-1)
-            q_target = n_step_reward + self.gamma * discount * next_q_val
-            q_target = q_target.squeeze()
-        q_observed = self.qnet(s0).gather(1, a0.long()).squeeze(1)
+            next_q_vals = self.q_target(s1)
+            if self.ddqn:
+                a1 = torch.argmax(self.qnet(s1), dim=1).unsqueeze(-1)
+                next_q_val = next_q_vals.gather(1, a1).squeeze()
+            else:
+                next_q_val = torch.max(next_q_vals, dim=1).values
+            q_target = n_step_reward.squeeze() + self.gamma * discount.squeeze() * next_q_val
+        q_observed = self.qnet(s0).gather(1, a0.long()).squeeze()
 
         critic_loss, batch_loss = self.calc_loss(q_observed, q_target)
         self.optimizer.zero_grad()
