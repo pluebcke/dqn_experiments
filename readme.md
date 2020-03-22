@@ -24,7 +24,7 @@ I'll add further sources that helped me to better understand some detail of the 
 ## Todo
 There are still some things I need to implement for the full Rainbow algorithm. My next steps in that direction are:
 - Implement the improvements and run them on the BSuite experiments:
-  - ~~DDQN~~ added 2020-03-2020
+  - ~~DDQN~~ added 2020-03-22
   - Dueling DDQN
   - n-Step roll out
   - Prioritized Replay
