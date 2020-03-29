@@ -6,7 +6,7 @@ from bsuite.baselines.utils import pool
 from agent import Agent
 import torch
 
-save_path = "./runs/run014/"  # Path were the results are saved.
+save_path = "./runs/run018/"  # Path were the results are saved.
 
 
 def run(bsuite_id: str) -> str:
@@ -32,8 +32,8 @@ def run(bsuite_id: str) -> str:
     # Settings for the specific agent
     settings = {"batch_size": qnet_settings["batch_size"], "epsilon_start": 1.0, "epsilon_decay": 0.999,
                 "epsilon_min": 0.025, "gamma": 0.99, "buffer_size": 200000, "lr": 1e-3, "qnet_settings": qnet_settings,
-                "start_optimization": 64, "update_qnet_every": 2, "update_target_every": 250,
-                "ddqn": True}
+                "start_optimization": 64, "update_qnet_every": 2, "update_target_every": 50,
+                "ddqn": False, "n_steps": 8}
 
     agent = Agent(action_spec=env.action_spec(),
                   observation_spec=env.observation_spec(),
@@ -49,4 +49,6 @@ def run(bsuite_id: str) -> str:
     return bsuite_id
 
 bsuite_sweep = getattr(sweep, 'SWEEP')
-pool.map_mpi(run, bsuite_sweep, 6)
+pool.map_mpi(run, bsuite_sweep, 8)
+
+

@@ -47,8 +47,7 @@ class Agent:
         self.ddqn = settings["ddqn"]
 
         # Initialize replay memory
-        self.memory = ReplayMemory(device, settings['buffer_size'], self.gamma,
-                                   None)  # Extra none to prepare for unrolling steps
+        self.memory = ReplayMemory(device, settings['buffer_size'], self.gamma, settings['n_steps'])
         return
 
     def policy(self, timestep: dm_env.TimeStep) -> int:
