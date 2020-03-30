@@ -26,7 +26,7 @@ There are still some things I need to implement for the full Rainbow algorithm. 
 - Implement the improvements and run them on the BSuite experiments:
   - ~~DDQN~~ added 2020-03-22
   - Dueling DDQN
-  - n-Step roll out
+  - ~~n-Step roll out~~ added 2020-03-30
   - Prioritized Replay
   - Distributional DQN
   - Noisy DDQ
