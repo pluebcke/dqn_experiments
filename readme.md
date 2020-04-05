@@ -29,7 +29,7 @@ There are still some things I need to implement for the full Rainbow algorithm. 
   - ~~n-Step roll out~~ added 2020-03-30
   - Prioritized Replay
   - Distributional DQN
-  - Noisy DDQ
+  - Noisy DDQN
 - Write better dosctrings and fix some errors within them.
 
 ## References
