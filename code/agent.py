@@ -6,7 +6,7 @@ import torch.optim as optim
 import typing
 
 from memory import Experience, ReplayMemory
-from qnet import Dqn
+from qnet import Dqn, DuelDQN
 
 
 class Agent:
@@ -30,8 +30,12 @@ class Agent:
         self.state_size = state_size
         self.batch_size = settings['batch_size']
 
-        self.qnet = Dqn(state_size, action_size, settings['qnet_settings']).to(device)
-        self.q_target = Dqn(state_size, action_size, settings['qnet_settings']).to(device)
+        if settings["duelling_dqn"]:
+            self.qnet = DuelDQN(state_size, action_size, settings['qnet_settings']).to(device)
+            self.q_target = DuelDQN(state_size, action_size, settings['qnet_settings']).to(device)
+        else:
+            self.qnet = Dqn(state_size, action_size, settings['qnet_settings']).to(device)
+            self.q_target = Dqn(state_size, action_size, settings['qnet_settings']).to(device)
         self.q_target.load_state_dict(self.qnet.state_dict())
         self.optimizer = optim.Adam(self.qnet.parameters(), lr=settings['lr'])
 
@@ -63,6 +67,7 @@ class Agent:
         observation = torch.from_numpy(observation).float().to(self.device)
         self.number_steps += 1
         self.update_epsilon()
+
         if np.random.rand() < self.epsilon:
             return np.random.choice(self.action_size)
         else:
@@ -155,11 +160,13 @@ class Agent:
 
         with torch.no_grad():
             next_q_vals = self.q_target(s1)
+
             if self.ddqn:
                 a1 = torch.argmax(self.qnet(s1), dim=1).unsqueeze(-1)
                 next_q_val = next_q_vals.gather(1, a1).squeeze()
             else:
                 next_q_val = torch.max(next_q_vals, dim=1).values
+
             q_target = n_step_reward.squeeze() + self.gamma * discount.squeeze() * next_q_val
         q_observed = self.qnet(s0).gather(1, a0.long()).squeeze()
 

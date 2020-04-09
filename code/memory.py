@@ -72,6 +72,7 @@ class ReplayMemory:
 
         """
         buffer = self.buffer
+
         if len(buffer) == 0:
             return
 
