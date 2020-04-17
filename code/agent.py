@@ -5,7 +5,7 @@ import torch.nn.functional as functional
 import torch.optim as optim
 import typing
 
-from memory import Experience, ReplayMemory
+from memory import Experience, ReplayMemory, PrioritizedReplayMemory
 from qnet import Dqn, DuelDQN
 
 
@@ -51,7 +51,12 @@ class Agent:
         self.ddqn = settings["ddqn"]
 
         # Initialize replay memory
-        self.memory = ReplayMemory(device, settings['buffer_size'], self.gamma, settings['n_steps'])
+        self.prioritized_replay = settings["prioritized_buffer"]
+        if self.prioritized_replay:
+            self.memory = PrioritizedReplayMemory(device, settings["buffer_size"], self.gamma, settings["n_steps"],
+                                                  settings["alpha"], settings["beta0"], settings["beta_increment"])
+        else:
+            self.memory = ReplayMemory(device, settings["buffer_size"], self.gamma, settings["n_steps"])
         return
 
     def policy(self, timestep: dm_env.TimeStep) -> int:
@@ -94,8 +99,17 @@ class Agent:
         Returns:
             tuple(torch.Tensor, np.float64): mean squared error loss, loss for each sample
         """
-        losses = functional.mse_loss(q_observed, q_target)
+        losses = functional.mse_loss(q_observed, q_target, reduction='none')
         return losses.mean(), losses.cpu().detach().numpy() + 1e-8
+
+    @staticmethod
+    def calc_weighted_loss(q_observed: torch.Tensor,
+                           q_target: torch.Tensor,
+                           weights: torch.Tensor) -> typing.Tuple[torch.Tensor, np.float64]:
+        tmp = q_target.sum()
+        losses = functional.mse_loss(q_observed, q_target, reduction='none')
+        loss =  (weights*losses).sum() / weights.sum()
+        return loss, losses.cpu().detach().numpy() + 1e-8
 
     def update(self,
                step: dm_env.TimeStep,
@@ -170,9 +184,13 @@ class Agent:
             q_target = n_step_reward.squeeze() + self.gamma * discount.squeeze() * next_q_val
         q_observed = self.qnet(s0).gather(1, a0.long()).squeeze()
 
-        critic_loss, batch_loss = self.calc_loss(q_observed, q_target)
+        if self.prioritized_replay:
+            critic_loss, batch_loss = self.calc_weighted_loss(q_observed, q_target, weights)
+        else:
+            critic_loss, batch_loss = self.calc_loss(q_observed, q_target)
         self.optimizer.zero_grad()
         critic_loss.backward()
         self.optimizer.step()
+
         self.memory.update_priorities(indices, batch_loss)
         return
