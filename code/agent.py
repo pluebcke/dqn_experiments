@@ -106,7 +106,6 @@ class Agent:
     def calc_weighted_loss(q_observed: torch.Tensor,
                            q_target: torch.Tensor,
                            weights: torch.Tensor) -> typing.Tuple[torch.Tensor, np.float64]:
-        tmp = q_target.sum()
         losses = functional.mse_loss(q_observed, q_target, reduction='none')
         loss =  (weights*losses).sum() / weights.sum()
         return loss, losses.cpu().detach().numpy() + 1e-8
