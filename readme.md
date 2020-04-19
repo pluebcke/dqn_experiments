@@ -22,13 +22,14 @@ I'll add further sources that helped me to better understand some detail of the 
 - [Basic DQN client and the first results](https://github.com/pluebcke/dqn_experiments/blob/master/results/basic_dqn.ipynb)
 - [DDQN](https://github.com/pluebcke/dqn_experiments/blob/master/results/ddqn.ipynb)
 - [Dueling DQN](https://github.com/pluebcke/dqn_experiments/blob/master/results/dueling_networks.ipynb)
+- [Prioritized Experience Replay](https://github.com/pluebcke/dqn_experiments/blob/master/results/prioritized_experience_replay.ipynb)
 ## To do
 There are still some things I need to implement for the full Rainbow algorithm. My next steps in that direction are:
 - Implement the improvements and run them on the BSuite experiments:
   - ~~DDQN~~ added 2020-03-22
   - ~~Dueling DDQN~~ added 2020-04-10
   - ~~n-Step roll out~~ added 2020-03-30
-  - Prioritized Replay
+  - ~~Prioritized Replay~~ added 2020-04-19
   - Distributional DQN
   - Noisy DDQN
 - Write better dosctrings and fix some errors within them.
