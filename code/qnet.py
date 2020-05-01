@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as functional
+from noisy_linear import NoisyLinear
 
 
 class Qnet(nn.Module):
@@ -32,10 +33,16 @@ class Dqn(Qnet):
         """
         super(Dqn, self).__init__()
         self.batch_size = settings["batch_size"]
+        self.noisy_net = settings['noisy_net']
         layers_size = settings["layers_sizes"][0]
-        self.FC1 = nn.Linear(int(states_size), layers_size)
-        self.FC2 = nn.Linear(layers_size, layers_size)
-        self.FC3 = nn.Linear(layers_size, int(action_size))
+        if not self.noisy_net:
+            self.FC1 = nn.Linear(int(states_size), layers_size)
+            self.FC2 = nn.Linear(layers_size, layers_size)
+            self.FC3 = nn.Linear(layers_size, int(action_size))
+        else:
+            self.FC1 = NoisyLinear(int(states_size), layers_size )
+            self.FC2 = NoisyLinear(layers_size, layers_size)
+            self.FC3 = NoisyLinear(layers_size, int(action_size))
         self.reset()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -60,7 +67,16 @@ class Dqn(Qnet):
         torch.nn.init.xavier_uniform_(self.FC1.weight.data)
         torch.nn.init.xavier_uniform_(self.FC2.weight.data)
         torch.nn.init.xavier_uniform_(self.FC3.weight.data)
+        if self.noisy_net:
+            self.reset_noise()
 
+    def reset_noise(self) -> None:
+        """
+        Resets the noise of the noisy layers.
+        """
+        self.FC1.reset_noise()
+        self.FC2.reset_noise()
+        self.FC3.reset_noise()
 
 class DuelDQN(Qnet):
     def __init__(self, states_size: np.ndarray, action_size: np.ndarray, settings: dict) -> None:
@@ -74,11 +90,17 @@ class DuelDQN(Qnet):
         super(DuelDQN, self).__init__()
         self.batch_size = settings["batch_size"]
         layers_size = settings["layers_sizes"][0]
-        self.FC1 = nn.Linear(int(states_size), layers_size)
-        self.FC2 = nn.Linear(layers_size, layers_size)
-        self.FC3v = nn.Linear(layers_size, 1)
-        self.FC3a = nn.Linear(layers_size, int(action_size))
-
+        self.noisy_net = settings['noisy_nets']
+        if not self.noisy_net:
+            self.FC1 = nn.Linear(int(states_size), layers_size)
+            self.FC2 = nn.Linear(layers_size, layers_size)
+            self.FC3v = nn.Linear(layers_size, 1)
+            self.FC3a = nn.Linear(layers_size, int(action_size))
+        else:
+            self.FC1 = NoisyLinear(int(states_size), layers_size)
+            self.FC2 = NoisyLinear(layers_size, layers_size)
+            self.FC3v = NoisyLinear(layers_size, 1)
+            self.FC3a = NoisyLinear(layers_size, int(action_size))
         self.reset()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -110,3 +132,14 @@ class DuelDQN(Qnet):
         torch.nn.init.xavier_uniform_(self.FC2.weight.data)
         torch.nn.init.xavier_uniform_(self.FC3a.weight.data)
         torch.nn.init.xavier_uniform_(self.FC3v.weight.data)
+        if self.noisy_net:
+            self.reset_noise()
+
+    def reset_noise(self) -> None:
+        """
+        Resets the noise of the noisy layers.
+        """
+        self.FC1.reset_noise()
+        self.FC2.reset_noise()
+        self.FC3a.reset_noise()
+        self.FC3v.reset_noise()

@@ -29,6 +29,7 @@ class Agent:
         self.action_size = action_size
         self.state_size = state_size
         self.batch_size = settings['batch_size']
+        self.noisy_nets = settings['qnet_settings']['noisy_nets']
 
         if settings["duelling_dqn"]:
             self.qnet = DuelDQN(state_size, action_size, settings['qnet_settings']).to(device)
@@ -71,7 +72,11 @@ class Agent:
         observation = np.array(timestep.observation).flatten()
         observation = torch.from_numpy(observation).float().to(self.device)
         self.number_steps += 1
-        self.update_epsilon()
+
+        if not self.noisy_nets:
+            self.update_epsilon()
+#        else:
+#            self.qnet.reset_noise()
 
         if np.random.rand() < self.epsilon:
             return np.random.choice(self.action_size)
@@ -107,7 +112,7 @@ class Agent:
                            q_target: torch.Tensor,
                            weights: torch.Tensor) -> typing.Tuple[torch.Tensor, np.float64]:
         losses = functional.mse_loss(q_observed, q_target, reduction='none')
-        loss =  (weights*losses).sum() / weights.sum()
+        loss = (weights * losses).sum() / weights.sum()
         return loss, losses.cpu().detach().numpy() + 1e-8
 
     def update(self,
@@ -172,23 +177,29 @@ class Agent:
         """
 
         with torch.no_grad():
+            if self.noisy_nets:
+                self.q_target.reset_noise()
+                self.qnet.reset_noise()
             next_q_vals = self.q_target(s1)
-
             if self.ddqn:
                 a1 = torch.argmax(self.qnet(s1), dim=1).unsqueeze(-1)
                 next_q_val = next_q_vals.gather(1, a1).squeeze()
             else:
                 next_q_val = torch.max(next_q_vals, dim=1).values
-
             q_target = n_step_reward.squeeze() + self.gamma * discount.squeeze() * next_q_val
+
+        if self.noisy_nets:
+            self.qnet.reset_noise()
         q_observed = self.qnet(s0).gather(1, a0.long()).squeeze()
 
         if self.prioritized_replay:
             critic_loss, batch_loss = self.calc_weighted_loss(q_observed, q_target, weights)
         else:
             critic_loss, batch_loss = self.calc_loss(q_observed, q_target)
+
         self.optimizer.zero_grad()
         critic_loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.qnet.parameters(), 5)
         self.optimizer.step()
 
         self.memory.update_priorities(indices, batch_loss)
