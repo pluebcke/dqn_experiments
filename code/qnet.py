@@ -29,7 +29,7 @@ class Dqn(Qnet):
         Args:
             states_size: Size of the input space.
             action_size:Size of the action space.
-            settings: dictionary with settings, currently not used.
+            settings: dictionary with settings
         """
         super(Dqn, self).__init__()
         self.batch_size = settings["batch_size"]
@@ -52,7 +52,7 @@ class Dqn(Qnet):
             x(torch.Tensor): observation or a batch of observations
 
         Returns:
-            torch.Tensor: q-values for all  observations and actions
+            torch.Tensor: q-values for all observations and actions, size: batch_size x actions_size
         """
         x = functional.relu(self.FC1(x))
         x = functional.relu(self.FC2(x))
