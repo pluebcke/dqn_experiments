@@ -24,6 +24,7 @@ I'll add further sources that helped me to better understand some detail of the 
 - [Dueling DQN](https://github.com/pluebcke/dqn_experiments/blob/master/results/dueling_networks.ipynb)
 - [Prioritized Experience Replay](https://github.com/pluebcke/dqn_experiments/blob/master/results/prioritized_experience_replay.ipynb)
 - [Noisy Networks](https://github.com/pluebcke/dqn_experiments/blob/master/results/noisy_nets.ipynb)
+- [Distributional DQN](https://github.com/pluebcke/dqn_experiments/blob/master/results/distributional_dqn.ipynb)
 ## To do
 There are still some things I need to implement for the full Rainbow algorithm. My next steps in that direction are:
 - Implement the improvements and run them on the BSuite experiments:
@@ -31,7 +32,7 @@ There are still some things I need to implement for the full Rainbow algorithm. 
   - ~~Dueling DDQN~~ added 2020-04-10
   - ~~n-Step roll out~~ added 2020-03-30
   - ~~Prioritized Replay~~ added 2020-04-19
-  - Distributional DQN
+  - ~~Distributional DQN~~ added 2020-05-14
   - ~~Noisy DDQN~~ added 2020-05-09
 - Write better dosctrings and fix some errors within them.
 
