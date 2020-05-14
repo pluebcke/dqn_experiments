@@ -39,8 +39,8 @@ There are still some things I need to implement for the full Rainbow algorithm. 
 ## References
 [1] https://www.alexirpan.com/2018/02/14/rl-hard.html, last  visited: 2020-03-03  
 [2] Engstrom, Logan, et al. "Implementation Matters in Deep RL: A Case Study on PPO and TRPO." International Conference on Learning Representations. 2019.  
-[3] Osband, Ian, et al. "Behaviour Suite for Reinforcement Learning." arXiv preprint arXiv:1908.03568 (2019).  
-[4] Mnih, Volodymyr, et al. Human-level control through deep reinforcement learning. Nature, 2015, 518. Jg., Nr. 7540, S. 529-533.  
+[3] Osband, Ian, et al. "Behaviour Suite for Reinforcement Learning." arXiv preprint arXiv:1908.03568, 2019.  
+[4] Mnih, Volodymyr, et al. Human-level control through deep reinforcement learning. Nature, 518. Jg., Nr. 7540, S. 529-533, 2015.  
 [5] Hessel, Matteo, et al. Rainbow: Combining improvements in deep reinforcement learning. In: Thirty-Second AAAI Conference on Artificial Intelligence. 2018.  
 
 #### Code References:  
